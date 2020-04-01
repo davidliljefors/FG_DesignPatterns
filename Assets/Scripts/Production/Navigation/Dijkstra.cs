@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace AI
+namespace MapTools
 {
 	public class Dijkstra : IPathFinder
 	{
@@ -12,12 +12,6 @@ namespace AI
 		{
 			accessible = new HashSet<Vector2Int>(accessibles);
 		}
-
-		public Dijkstra(Map map)
-		{
-			//accessible = map.GetWalkables();
-		}
-
 
 		public IEnumerable<Vector2Int> FindPath(Vector2Int start, Vector2Int goal)
 		{
@@ -54,14 +48,9 @@ namespace AI
 				{
 					path.Add(step.Value);
 				}
-
-				//We have path
-				Debug.Log("Found path");
 				path.Reverse();
 				return path;
 			}
-			//We have no path
-			Debug.Log("No path found");
 			return accessible;
 		}
 	}

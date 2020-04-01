@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AI;
+using MapTools;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -55,7 +55,7 @@ namespace Tests
                 }
             }
 
-            IPathFinder pathFinder = new AI.Dijkstra(accessibles); //<-- TODO: Create Dijsktra pathfinder class here, TIP-->> Use accessible tiles
+            IPathFinder pathFinder = new MapTools.Dijkstra(accessibles); //<-- TODO: Create Dijsktra pathfinder class here, TIP-->> Use accessible tiles
             IEnumerable<Vector2Int> path = pathFinder.FindPath(new Vector2Int(xStart, yStart), new Vector2Int(xGoal, yGoal));            
             Assert.AreEqual(expectedLength, path.Count());          
         }    
