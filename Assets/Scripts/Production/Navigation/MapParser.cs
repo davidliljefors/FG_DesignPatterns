@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using UnityEngine.Assertions;
 
 namespace MapTools
 {
-	public class MapKeyData
+	[System.Serializable]
+	public struct MapKeyData
 	{
-		public MapKeyData(TileType type, GameObject prefab)
-		{
-			Type = type;
-			Prefab = prefab;
-		}
-		public TileType Type { get; private set; }
-		public GameObject Prefab { get; private set; }
+		public TileType type;
+		public GameObject prefab;
+	}
+
+	[System.Serializable]
+	public struct UnitWave
+	{
+		List<int> units;
 	}
 
 	public class MapInfo
@@ -51,15 +52,13 @@ namespace MapTools
 			{
 				return walkable;
 			}
-			CalculatePath();
+			CalculateWalkable();
 			return walkable;
 		}
 
 
-		private void CalculatePath()
+		private void CalculateWalkable()
 		{
-			walkable = new List<Vector2Int>();
-
 			for (int i = 0; i < tiles.GetLength(0); ++i)
 			{
 				for (int j = 0; j < tiles.GetLength(1); ++j)
@@ -73,14 +72,13 @@ namespace MapTools
 
 	public static class MapBuilder
 	{
-
 		public static void ConstructMap(MapInfo mapInfo, Vector2Int tileSize, Vector2Int offset , IEnumerable<MapKeyData> mapKeyData)
 		{
 			Dictionary<TileType, GameObject> m_PrefabsById;
 			m_PrefabsById = new Dictionary<TileType, GameObject>();
 			foreach (MapKeyData data in mapKeyData)
 			{
-				m_PrefabsById.Add(data.Type, data.Prefab);
+				m_PrefabsById.Add(data.type, data.prefab);
 			}
 			ConstructMap(mapInfo, tileSize, offset, m_PrefabsById);
 		}
@@ -147,9 +145,9 @@ namespace MapTools
 			}
 
 			// Todo check if map settings works
-			MapInfo settings = new MapInfo(tiles, enemySettings);
+			MapInfo info = new MapInfo(tiles, enemySettings);
 
-			return settings;
+			return info;
 		}
 	}
 }

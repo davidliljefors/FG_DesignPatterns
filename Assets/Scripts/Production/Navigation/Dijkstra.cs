@@ -16,17 +16,17 @@ namespace MapTools
 		public IEnumerable<Vector2Int> FindPath(Vector2Int start, Vector2Int goal)
 		{
 			Dictionary<Vector2Int, Vector2Int?> ancestors = new Dictionary<Vector2Int, Vector2Int?>();
-			Queue<Vector2Int> frontier = new Queue<Vector2Int>();
+			Queue<Vector2Int> positionsToEvaluate = new Queue<Vector2Int>();
 			
 			Vector2Int current = start;
 
 			ancestors.Add(current, null);
-			frontier.Enqueue(current);
+			positionsToEvaluate.Enqueue(current);
 
 			// Loop through all accessible tiles
-			while (frontier.Count > 0)
+			while (positionsToEvaluate.Count > 0)
 			{
-				current = frontier.Dequeue();
+				current = positionsToEvaluate.Dequeue();
 				if (current == goal)
 				{ break; }
 
@@ -35,7 +35,7 @@ namespace MapTools
 					Vector2Int test = current + dir;
 					if (accessible.Contains(test) && !ancestors.ContainsKey(test))
 					{
-						frontier.Enqueue(test);
+						positionsToEvaluate.Enqueue(test);
 						ancestors.Add(test, current);
 					}
 				}

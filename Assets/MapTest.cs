@@ -1,14 +1,15 @@
 ﻿using MapTools;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class MapTest : MonoBehaviour
 {
-	[SerializeField] private GameObject[] prefabs = default;
-	[SerializeField] private TileType[] types = default;
+	[SerializeField] private MapKeyData[] prefabToTile;
+	[SerializeField] private TextAsset mapFile;
 
-	MapInfo mapInfo;
-	Dijkstra dijkstra;
+	private MapInfo mapInfo;
+	private Dijkstra dijkstra;
 
 	private Vector2Int offset;
 	private Vector2Int tileSize;
@@ -16,17 +17,10 @@ public class MapTest : MonoBehaviour
 
 	void Start()
 	{
-		TextAsset txt = Resources.Load("MapSettings/map_2") as TextAsset;
-		List<MapKeyData> mapKeyData = new List<MapKeyData>();
-		for (int i = 0; i < prefabs.Length; ++i)
-		{
-			mapKeyData.Add(new MapKeyData(types[i], prefabs[i]));
-		}
 		offset = new Vector2Int(10, 10);
 		tileSize = new Vector2Int(2, 2);
-		mapInfo = MapParser.ParseMap(txt.text);
-		MapBuilder.ConstructMap(mapInfo, tileSize, offset, mapKeyData);
-
+		mapInfo = MapParser.ParseMap(mapFile.text);
+		MapBuilder.ConstructMap(mapInfo, tileSize, offset, prefabToTile);
 
 		dijkstra = new Dijkstra(mapInfo.GetWalkable());
 		path = dijkstra.FindPath(mapInfo.Start.Value, mapInfo.End.Value);
@@ -34,11 +28,10 @@ public class MapTest : MonoBehaviour
 
 	private void OnDrawGizmosSelected()
 	{
-
 		if (mapInfo != null)
 		{
 			Gizmos.color = Color.red;
-			foreach (var item in mapInfo.GetWalkable())
+			foreach (Vector2Int item in mapInfo.GetWalkable())
 			{
 				Gizmos.DrawWireSphere(new Vector3(item.x * tileSize.x + offset.x, 0, item.y * tileSize.y + offset.y), 0.5f);
 			}
