@@ -111,11 +111,12 @@ namespace MapTools
 
 			//Loop over the map layout
 			{
-				string[] rows = mapData.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+				string[] rows = mapData.Split(new char[] { '\n', (char)13 }, System.StringSplitOptions.RemoveEmptyEntries);
 				Assert.IsNotNull(rows);
 				Assert.IsNotNull(rows[0]);
 
 				tiles = new TileType[rows.Length, rows[0].Length];
+				
 				for (int i = 0; i < rows.Length; ++i)
 				{
 					for (int j = 0; j < rows[i].Length; ++j)
