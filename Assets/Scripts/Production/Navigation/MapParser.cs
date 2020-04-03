@@ -4,6 +4,7 @@ using UnityEngine.Assertions;
 
 namespace MapTools
 {
+
 	[System.Serializable]
 	public struct MapKeyData
 	{
@@ -12,32 +13,36 @@ namespace MapTools
 	}
 
 	[System.Serializable]
-	public struct UnitWave
+	public class UnitWave
 	{
-		List<int> units;
+		public List<int> units;
+		public UnitWave()
+		{
+			units = new List<int>();
+		}
 	}
 
 	public class MapInfo
 	{
 		public TileType[,] tiles;
-		public IEnumerable<int> unitCount;
+		public IEnumerable<UnitWave> units;
 		private List<Vector2Int> walkable;
 		private bool calculatedWalkable;
 		public Vector2Int? Start { get; private set; }
 		public Vector2Int? End { get; private set; }
-		public MapInfo(TileType[,] tiles, IEnumerable<int> unitCount)
+		public MapInfo(TileType[,] tiles, IEnumerable<UnitWave> units)
 		{
 			this.tiles = tiles;
-			this.unitCount = unitCount;
+			this.units = units;
 
 			walkable = new List<Vector2Int>();
 
-			for(int i = 0; i< tiles.GetLength(0); ++i)
+			for (int i = 0; i < tiles.GetLength(0); ++i)
 			{
-				for(int j = 0; j< tiles.GetLength(1); ++j)
+				for (int j = 0; j < tiles.GetLength(1); ++j)
 				{
 					if (tiles[i, j] == TileType.Start)
-						Start = new Vector2Int(i,j);
+						Start = new Vector2Int(i, j);
 					if (tiles[i, j] == TileType.End)
 						End = new Vector2Int(i, j);
 				}
@@ -48,7 +53,7 @@ namespace MapTools
 
 		public IEnumerable<Vector2Int> GetWalkable()
 		{
-			if(calculatedWalkable)
+			if (calculatedWalkable)
 			{
 				return walkable;
 			}
@@ -72,7 +77,7 @@ namespace MapTools
 
 	public static class MapBuilder
 	{
-		public static void ConstructMap(MapInfo mapInfo, Vector2Int tileSize, Vector2Int offset , IEnumerable<MapKeyData> mapKeyData)
+		public static void ConstructMap(MapInfo mapInfo, Vector2Int tileSize, Vector2Int offset, IEnumerable<MapKeyData> mapKeyData)
 		{
 			Dictionary<TileType, GameObject> m_PrefabsById;
 			m_PrefabsById = new Dictionary<TileType, GameObject>();
@@ -91,7 +96,7 @@ namespace MapTools
 				for (int j = 0; j < mapInfo.tiles.GetLength(1); ++j)
 				{
 					GameObject prefab = mapKeyData[mapInfo.tiles[i, j]];
-					GameObject.Instantiate(prefab, new Vector3(offset.x + i * tileSize.x,0, offset.y + j * tileSize.y), Quaternion.identity);
+					GameObject.Instantiate(prefab, new Vector3(offset.x + i * tileSize.x, 0, offset.y + j * tileSize.y), Quaternion.identity);
 				}
 			}
 		}
@@ -116,37 +121,55 @@ namespace MapTools
 				Assert.IsNotNull(rows[0]);
 
 				tiles = new TileType[rows.Length, rows[0].Length];
-				
+
 				for (int i = 0; i < rows.Length; ++i)
 				{
 					for (int j = 0; j < rows[i].Length; ++j)
 					{
-						tiles[i, j] = TileMethods.TypeByChar[rows[i][j]];
+						if(TileMethods.TypeByChar.TryGetValue(rows[i][j], out TileType tile))
+						{
+							tiles[i, j] = tile;
+						}
+						else
+						{
+							// Question to Ederic, thorw Exception or Debug.LogError?
+							Debug.LogError("Unexpected Map format!");
+							throw new System.InvalidOperationException("Cannot parse map data");
+						}
 					}
 				}
 			}
 
-			List<int> enemySettings = new List<int>();
+			List<UnitWave> unitWaves = new List<UnitWave>();
 			// Loop over the enemy counts
 			{
-				int enemyCount = 0;
-				foreach (char c in enemyData)
+				string[] rows = enemyData.Split(new char[] { '\n', (char)13 }, System.StringSplitOptions.RemoveEmptyEntries);
+
+				// One Wave per line
+				for (int i = 0; i < rows.Length; ++i)
 				{
-					if (c == ' ')
+					string[] unitCounts = rows[i].Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+					UnitWave wave = new UnitWave();
+
+					foreach (string unitCount in unitCounts)
 					{
-						enemySettings.Add(enemyCount);
+						if (int.TryParse(unitCount, out int result))
+						{
+							wave.units.Add(int.Parse(unitCount));
+						}
+						else
+						{
+							// Question to Ederic, thorw Exception or Debug.LogError?
+							Debug.LogError("Unexpected Map format!");
+							throw new System.InvalidOperationException("Cannot parse map data");
+						}
 					}
-					enemyCount *= 10;
-					enemyCount += (int)char.GetNumericValue(c);
-				}
-				if(enemyCount != 0)
-				{
-					enemySettings.Add(enemyCount);
+					unitWaves.Add(wave);
 				}
 			}
 
 			// Todo check if map settings works
-			MapInfo info = new MapInfo(tiles, enemySettings);
+			MapInfo info = new MapInfo(tiles, unitWaves);
 
 			return info;
 		}
