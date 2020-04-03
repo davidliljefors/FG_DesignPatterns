@@ -5,8 +5,8 @@ using System;
 
 public class MapTest : MonoBehaviour
 {
-	[SerializeField] private MapKeyData[] prefabToTile;
-	[SerializeField] private TextAsset mapFile;
+	[SerializeField] private MapKeyData[] prefabToTile = default;
+	[SerializeField] private TextAsset mapFile = default;
 
 	private MapInfo mapInfo;
 	private Dijkstra dijkstra;
