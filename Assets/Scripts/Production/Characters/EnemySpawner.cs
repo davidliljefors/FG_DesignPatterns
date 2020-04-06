@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-	[SerializeField] private MapManager mapManager;
+	[SerializeField] private MapManager mapManager = default;
 	[SerializeField] private GameObject enemyPrefab = default;
 
 	// Start is called before the first frame update

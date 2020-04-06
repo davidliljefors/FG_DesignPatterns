@@ -5,15 +5,15 @@ namespace MapTools
 {
 	public static class MapBuilder
 	{
-		public static void Build(TileType[,] tiles, MapConfig settings)
+		public static void Build(TileType[,] tiles, ITileConfig config)
 		{
 			Dictionary<TileType, GameObject> m_PrefabsById;
 			m_PrefabsById = new Dictionary<TileType, GameObject>();
-			foreach (MapKeyData data in settings.tileToPrefab)
+			foreach (MapKeyData data in config.TileToPrefab)
 			{
 				m_PrefabsById.Add(data.type, data.prefab);
 			}
-			Build(tiles, settings.tileSize, settings.spawnOffset, m_PrefabsById);
+			Build(tiles, config.TileSize, config.SpawnOffset, m_PrefabsById);
 		}
 
 		private static void Build(TileType[,] tiles, Vector2Int tileSize, Vector2Int offset, Dictionary<TileType, GameObject> mapKeyData)

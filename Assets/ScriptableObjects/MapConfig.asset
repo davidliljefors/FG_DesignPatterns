@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MapConfig
   m_EditorClassIdentifier: 
   textFile: {fileID: 4900000, guid: 2f8246b41c2107b40b372057cb22be65, type: 3}
-  spawnOffset: {x: 5, y: 5}
   tileSize: {x: 2, y: 2}
+  spawnOffset: {x: 5, y: 5}
   tileToPrefab:
   - type: 0
     prefab: {fileID: 8446340793006353421, guid: 3445e6bc04d6d478291c03e5d82bb4fc,
