@@ -57,7 +57,7 @@ namespace MapTools
 					{
 						if (int.TryParse(unitCount, out int result))
 						{
-							wave.units.Add(int.Parse(unitCount));
+							wave.Units.Add(int.Parse(unitCount));
 						}
 						else
 						{

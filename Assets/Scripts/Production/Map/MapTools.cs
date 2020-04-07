@@ -7,47 +7,55 @@ namespace MapTools
 	[System.Serializable]
 	public struct MapKeyData
 	{
-		public TileType type;
-		public GameObject prefab;
+		[SerializeField] private TileType m_Type;
+		[SerializeField] private GameObject m_Prefab;
+
+		public TileType Type { get => m_Type; set => m_Type = value; }
+		public GameObject Prefab { get => m_Prefab; set => m_Prefab = value; }
 	}
 
 	[System.Serializable]
 	public class UnitWave
 	{
-		public List<int> units;
 		public UnitWave()
 		{
-			units = new List<int>();
+			Units = new List<int>();
 		}
+
+		public List<int> Units { get; set; }
 	}
 	/// <summary>
 	/// Contains information of the parsed map
 	/// </summary>
 	public class MapInfo
 	{
-		public TileType[,] tiles;
-		public IEnumerable<UnitWave> units;
 		public Vector2Int? Start { get; private set; }
 		public Vector2Int? End { get; private set; }
+		public TileType[,] Tiles { get; set; }
+		public IEnumerable<UnitWave> Units { get; set; }
 
-		private ICollection<Vector2Int> walkable;
+		private ICollection<Vector2Int> m_Walkable;
 		private bool calculatedWalkable = false;
 
 		public MapInfo(TileType[,] tiles, IEnumerable<UnitWave> units)
 		{
-			this.tiles = tiles;
-			this.units = units;
+			Tiles = tiles;
+			Units = units;
 
-			walkable = new List<Vector2Int>();
+			m_Walkable = new List<Vector2Int>();
 
 			for (int i = 0; i < tiles.GetLength(0); ++i)
 			{
 				for (int j = 0; j < tiles.GetLength(1); ++j)
 				{
 					if (tiles[i, j] == TileType.Start)
+					{
 						Start = new Vector2Int(i, j);
+					}
 					if (tiles[i, j] == TileType.End)
+					{
 						End = new Vector2Int(i, j);
+					}
 				}
 			}
 			Assert.IsTrue(Start.HasValue, "No Start found in map!");
@@ -57,21 +65,22 @@ namespace MapTools
 		{
 			if (calculatedWalkable)
 			{
-				return walkable;
+				return m_Walkable;
 			}
 			CalculateWalkable();
-			return walkable;
+			return m_Walkable;
 		}
-
 
 		private void CalculateWalkable()
 		{
-			for (int i = 0; i < tiles.GetLength(0); ++i)
+			for (int i = 0; i < Tiles.GetLength(0); ++i)
 			{
-				for (int j = 0; j < tiles.GetLength(1); ++j)
+				for (int j = 0; j < Tiles.GetLength(1); ++j)
 				{
-					if (TileMethods.IsWalkable(tiles[i, j]))
-						walkable.Add(new Vector2Int(i, j));
+					if (TileMethods.IsWalkable(Tiles[i, j]))
+					{
+						m_Walkable.Add(new Vector2Int(i, j));
+					}
 				}
 			}
 		}
