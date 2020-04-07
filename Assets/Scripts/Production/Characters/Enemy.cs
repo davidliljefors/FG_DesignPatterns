@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour, IEnemy, IResettable
 	{
 		if(reachedPlayerBase)
 		{
+			GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Health -= 1;
 			gameObject.SetActive(false);
 			// Todo Attack player
 			return;

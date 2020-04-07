@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, ICharacter
 {
-	private int m_Health;
+	[SerializeField] private int m_Health = 10;
 	public event Action<int> OnHealthChanged;
 	public int Health
 	{
@@ -18,15 +18,9 @@ public class Player : MonoBehaviour, ICharacter
 		}
 	}
 
-	// Start is called before the first frame update
-	void Start()
+	private void Awake()
 	{
 
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-
-	}
 }

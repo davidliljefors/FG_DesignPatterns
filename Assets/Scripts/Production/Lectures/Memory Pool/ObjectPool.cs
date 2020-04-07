@@ -16,7 +16,7 @@ namespace Tools
 
 		public GameObjectPool(uint initSize, GameObject prefab, uint expandBy = 1, Transform parent = null)
 		{
-			m_ExpandBy = expandBy < 1 ? 1 : expandBy; // (uint)Mathf.Max(1, expandBy); shorthand if must be quicker?
+			m_ExpandBy = expandBy < 1 ? 1 : expandBy;
 			m_Prefab = prefab;
 			m_Parent = parent;
 
