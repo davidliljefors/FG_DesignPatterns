@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class Enemy : MonoBehaviour, IEnemy, IResettable
 {
 	public IList<Vector3> Path { get; set; }
@@ -68,5 +69,10 @@ public class Enemy : MonoBehaviour, IEnemy, IResettable
 	{
 		m_CurrentPathIndex++;
 		return Path[m_CurrentPathIndex] + m_PositionOffset;
+	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		
 	}
 }
