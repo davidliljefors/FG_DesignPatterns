@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
-public class Enemy : MonoBehaviour, IEnemy, IResettable
+public class Enemy : MonoBehaviour, IEnemy
 {
 	public IList<Vector3> Path { get; set; }
 	[SerializeField] private float m_MoveSpeed = 1f;
@@ -12,7 +12,8 @@ public class Enemy : MonoBehaviour, IEnemy, IResettable
 	private Vector3 m_MoveTo;
 	private Vector3 m_PositionOffset;
 	private int m_CurrentPathIndex = 0;
-	private bool reachedPlayerBase = false;
+	private bool m_ReachedPlayerBase = false;
+
 
 
 	public event Action<int> OnHealthChanged;
@@ -30,7 +31,7 @@ public class Enemy : MonoBehaviour, IEnemy, IResettable
 
 	void Update()
 	{
-		if(reachedPlayerBase)
+		if(m_ReachedPlayerBase)
 		{
 			GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Health -= 1;
 			gameObject.SetActive(false);
@@ -44,7 +45,7 @@ public class Enemy : MonoBehaviour, IEnemy, IResettable
 		{
 			if(m_CurrentPathIndex >= Path.Count-1)
 			{
-				reachedPlayerBase = true;
+				m_ReachedPlayerBase = true;
 				return;
 			}
 			m_MoveTo = GetNextPathPoint();
@@ -52,11 +53,11 @@ public class Enemy : MonoBehaviour, IEnemy, IResettable
 		}
 	}
 
-	public void Reset()
+	private void OnEnable()
 	{
 		m_CurrentPathIndex = 0;
 		m_Health = m_MaxHealth;
-		reachedPlayerBase = false;
+		m_ReachedPlayerBase = false;
 
 		var box = GetComponentInChildren<BoxCollider>();
 		m_PositionOffset = new Vector3(0, box.size.y / 2f, 0);
@@ -71,8 +72,4 @@ public class Enemy : MonoBehaviour, IEnemy, IResettable
 		return Path[m_CurrentPathIndex] + m_PositionOffset;
 	}
 
-	private void OnCollisionEnter(Collision collision)
-	{
-		
-	}
 }

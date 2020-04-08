@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using Tools;
 
+[RequireComponent(typeof(SphereCollider))]
+[SelectionBase]
 public class Tower : MonoBehaviour
 {
 	[SerializeField] private float m_Range = 3f;
 	[SerializeField] private float m_AttackDelay = 1f;
 	[SerializeField] private GameObject m_Projectile = default;
+	private const string k_EnemyTag = "Enemy";
 
 	[SerializeField] private GameObjectPool m_ProjectilePool;
 
@@ -13,15 +16,16 @@ public class Tower : MonoBehaviour
 
 	private void Start()
 	{
-		var sphere = GameObjectExtensions.ForceComponent<SphereCollider>(gameObject);
+		SphereCollider sphere = GetComponent<SphereCollider>();
 		sphere.radius = m_Range;
 		m_ProjectilePool = new GameObjectPool(5, m_Projectile, 1, transform);
 	}
 
 	private void OnTriggerStay(Collider other)
 	{
-		if (other.CompareTag("Enemy") && Time.time >= m_NextAttackTime)
+		if (other.CompareTag(k_EnemyTag) && Time.time >= m_NextAttackTime)
 		{
+			Debug.Log("Firing");
 			Fire(other.transform.position);
 			m_NextAttackTime = Time.time + m_AttackDelay;
 		}
@@ -29,8 +33,9 @@ public class Tower : MonoBehaviour
 
 	private void Fire(Vector3 target)
 	{
-		var proj = m_ProjectilePool.Rent(true).GetComponent<Projectile>();
-		proj.StartPosition = transform.position;
+		var go = m_ProjectilePool.Rent(true);
+		var proj = go.GetComponent<Projectile>();
+		go.transform.position = transform.position;
 		proj.Target = target;
 	}
 }
