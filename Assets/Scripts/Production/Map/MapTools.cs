@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
+using System;
 
 namespace MapTools
 {
@@ -19,10 +20,10 @@ namespace MapTools
 	{
 		public UnitWave()
 		{
-			Units = new List<int>();
+			Units = new Dictionary<UnitType, int>();
 		}
 
-		public List<int> Units { get; set; }
+		public IDictionary<UnitType, int> Units { get; set; }
 	}
 	/// <summary>
 	/// Contains information of the parsed map

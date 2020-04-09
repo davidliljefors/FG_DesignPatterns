@@ -2,17 +2,18 @@
 
 public class Projectile : MonoBehaviour
 {
-	[SerializeField] private float m_Speed = 50f;
 	private const string k_EnemyTag = "Enemy";
+
+	[SerializeField] private float m_Speed = 50f;
 	[SerializeField] private uint m_HitBufferSize = 8;
 	[SerializeField] private float m_ExplosionRadius = 0.5f;
-
-
+	[SerializeField] private int m_Damage = 1;
+	[SerializeField] private LayerMask m_CollisionLayer;
 
 	public Vector3 Target { get; set; }
-	public int Damage { get; set; }
+	public int Damage { get => m_Damage; set => m_Damage = value; }
 
-	Collider[] m_HitBuffer;
+	private Collider[] m_HitBuffer;
 
 	private void Awake()
 	{
@@ -24,14 +25,14 @@ public class Projectile : MonoBehaviour
 		transform.position = Vector3.MoveTowards(transform.position, Target, m_Speed * Time.deltaTime);
 		if (Vector3.Equals(transform.position, Target))
 		{
-			Debug.Log("Miss!");
+			Explode();
 			gameObject.SetActive(false);
 		}
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if(other.CompareTag(k_EnemyTag))
+		if (other.CompareTag(k_EnemyTag))
 		{
 			Explode();
 		}
@@ -39,15 +40,18 @@ public class Projectile : MonoBehaviour
 
 	private void Explode()
 	{
-		Debug.Log("Boom!");
-		int count = Physics.OverlapSphereNonAlloc(transform.position, m_ExplosionRadius, m_HitBuffer);
-		if(count > 0)
-		{
-			foreach(Collider col in m_HitBuffer)
-			{
+		int count = Physics.OverlapSphereNonAlloc(transform.position,
+			m_ExplosionRadius, m_HitBuffer, m_CollisionLayer);
 
+		for (int i = 0; i < count; i++)
+		{
+			IEnemy component = m_HitBuffer[i].GetComponentInParent<IEnemy>();
+			if(component != null)
+			{
+				component.Health -= Damage;
 			}
 		}
+
 		gameObject.SetActive(false);
 	}
 }

@@ -29,6 +29,14 @@ public class Enemy : MonoBehaviour, IEnemy
 		}
 	}
 
+	private void DeathCheck(int newHealth)
+	{
+		if (newHealth <= 0)
+		{
+			gameObject.SetActive(false);
+		}
+	}
+
 	void Update()
 	{
 		if(m_ReachedPlayerBase)
@@ -58,12 +66,18 @@ public class Enemy : MonoBehaviour, IEnemy
 		m_CurrentPathIndex = 0;
 		m_Health = m_MaxHealth;
 		m_ReachedPlayerBase = false;
+		OnHealthChanged += DeathCheck;
 
 		var box = GetComponentInChildren<BoxCollider>();
 		m_PositionOffset = new Vector3(0, box.size.y / 2f, 0);
 		transform.position += m_PositionOffset;
 		m_MoveTo = GetNextPathPoint();
 		transform.rotation = Quaternion.LookRotation(m_MoveTo - transform.position);
+	}
+
+	private void OnDisable()
+	{
+		OnHealthChanged -= DeathCheck;
 	}
 
 	private Vector3 GetNextPathPoint()

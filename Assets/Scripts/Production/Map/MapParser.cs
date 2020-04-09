@@ -53,11 +53,13 @@ namespace MapTools
 					string[] unitCounts = rows[i].Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
 					UnitWave wave = new UnitWave();
 
+					int typeID = 0;
 					foreach (string unitCount in unitCounts)
 					{
+
 						if (int.TryParse(unitCount, out int result))
 						{
-							wave.Units.Add(int.Parse(unitCount));
+							wave.Units.Add(UnitMethods.TypeById[typeID], int.Parse(unitCount));
 						}
 						else
 						{
@@ -65,6 +67,7 @@ namespace MapTools
 							Debug.LogError("Unexpected Map format!");
 							throw new System.InvalidOperationException("Cannot parse map data");
 						}
+						typeID++;
 					}
 					unitWaves.Add(wave);
 				}

@@ -245,7 +245,8 @@ MonoBehaviour:
   m_MapManager: {fileID: 1707057292}
   m_EnemyPrefab: {fileID: 5986334292170264001, guid: fc83a315c451df54aaf3c126e4fd102f,
     type: 3}
-  m_InitialPoolSize: 500
+  m_InitialPoolSize: 50
+  m_SpawnSpeed: 0.5
 --- !u!4 &1158546729
 Transform:
   m_ObjectHideFlags: 0
