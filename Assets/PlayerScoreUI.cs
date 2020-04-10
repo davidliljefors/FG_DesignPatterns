@@ -17,7 +17,11 @@ public class PlayerScoreUI : MonoBehaviour, IDisposable
 
     void UpdateText(int value)
     {
-        m_Text.text = "Health : "+value.ToString();
+        if(value >= 0)
+        { 
+            m_Text.text = "Health : "+value.ToString();
+        }
+        
     }
 
     public void Dispose()

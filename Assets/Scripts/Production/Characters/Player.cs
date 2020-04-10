@@ -13,14 +13,9 @@ public class Player : MonoBehaviour, ICharacter
 		{
 			if (m_Health != value)
 			{
-				m_Health = value; OnHealthChanged?.Invoke(m_Health);
+				m_Health = value; 
+				OnHealthChanged?.Invoke(m_Health);
 			}
 		}
 	}
-
-	private void Awake()
-	{
-
-	}
-
 }

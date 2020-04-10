@@ -1,21 +1,24 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
-public class Enemy : MonoBehaviour, IEnemy
+public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 {
 	public IList<Vector3> Path { get; set; }
 	[SerializeField] private float m_MoveSpeed = 1f;
 	[SerializeField] private int m_MaxHealth = 10;
+	[SerializeField] private float m_DeathTimer = 1f;
 	private int m_Health = 10;
-	private Vector3 m_MoveTo;
 	private Vector3 m_PositionOffset;
-	private int m_CurrentPathIndex = 0;
 	private bool m_ReachedPlayerBase = false;
+	private Animator m_Anim;
+	private BoxCollider m_Collider;
 
+	public List<IStatusEffect> ActiveStatusEffects { get; private set; }
 
-
+	public bool Killed { get; set; } = false;
 	public event Action<int> OnHealthChanged;
 	public int Health
 	{
@@ -24,66 +27,144 @@ public class Enemy : MonoBehaviour, IEnemy
 		{
 			if (m_Health != value)
 			{
-				m_Health = value; OnHealthChanged?.Invoke(m_Health);
+				m_Health = value;
+				OnHealthChanged?.Invoke(m_Health);
 			}
 		}
 	}
 
-	private void DeathCheck(int newHealth)
+	public int CurrentPathIndex { get; set; } = 0;
+	public float MoveSpeed { get => m_MoveSpeed; set => m_MoveSpeed = value; }
+
+	private void Awake()
 	{
-		if (newHealth <= 0)
-		{
-			gameObject.SetActive(false);
-		}
-	}
-
-	void Update()
-	{
-		if(m_ReachedPlayerBase)
-		{
-			GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Health -= 1;
-			gameObject.SetActive(false);
-			// Todo Attack player
-			return;
-		}
-
-		transform.position = Vector3.MoveTowards(transform.position, m_MoveTo, m_MoveSpeed * Time.deltaTime);
-
-		if(Vector3.Equals(transform.position, m_MoveTo))
-		{
-			if(m_CurrentPathIndex >= Path.Count-1)
-			{
-				m_ReachedPlayerBase = true;
-				return;
-			}
-			m_MoveTo = GetNextPathPoint();
-			transform.rotation = Quaternion.LookRotation(m_MoveTo - transform.position);
-		}
+		ActiveStatusEffects = new List<IStatusEffect>();
 	}
 
 	private void OnEnable()
 	{
-		m_CurrentPathIndex = 0;
+		CurrentPathIndex = 0;
 		m_Health = m_MaxHealth;
 		m_ReachedPlayerBase = false;
+		Killed = false;
 		OnHealthChanged += DeathCheck;
+		OnHealthChanged += TakeDamageAnim;
 
-		var box = GetComponentInChildren<BoxCollider>();
-		m_PositionOffset = new Vector3(0, box.size.y / 2f, 0);
+		m_Collider = GetComponentInChildren<BoxCollider>();
+		m_Collider.enabled = true;
+		m_Anim = GetComponent<Animator>();
+		m_PositionOffset = new Vector3(0, m_Collider.size.y / 2f, 0);
 		transform.position += m_PositionOffset;
-		m_MoveTo = GetNextPathPoint();
-		transform.rotation = Quaternion.LookRotation(m_MoveTo - transform.position);
 	}
 
 	private void OnDisable()
 	{
 		OnHealthChanged -= DeathCheck;
+		OnHealthChanged -= TakeDamageAnim;
 	}
 
-	private Vector3 GetNextPathPoint()
+	private void DeathCheck(int newHealth)
 	{
-		m_CurrentPathIndex++;
-		return Path[m_CurrentPathIndex] + m_PositionOffset;
+		if (newHealth <= 0 && !Killed)
+		{
+			// Todo: Fix! Only using string to set for testing purposes
+			const string Name = "Killed";
+			m_Anim.SetTrigger(Name);
+			Killed = true;
+			StartCoroutine(Die());
+		}
 	}
 
+	private void TakeDamageAnim(int value)
+	{
+		if (!Killed)
+		{
+			// Todo: Fix! Only using string to set for testing purposes
+			const string Name = "Damaged";
+			m_Anim.SetTrigger(Name);
+		}
+	}
+
+	void Update()
+	{
+		if (!Killed)
+		{
+			if (m_ReachedPlayerBase)
+			{
+				// Todo: fix string 
+				const string Tag = "Player";
+				GameObject.FindGameObjectWithTag(Tag).GetComponent<Player>().Health -= 1;
+				gameObject.SetActive(false);
+				// Todo Attack player
+				return;
+			}
+			Move(GetNextPosition());
+		}
+	}
+
+	public void Move(Vector3 nextPosition)
+	{
+		// Todo: Fix! Only using string to set for testing purposes
+		const string Name = "isWalking";
+		m_Anim.SetBool(Name, true);
+		transform.position = Vector3.MoveTowards(transform.position, nextPosition, MoveSpeed * Time.deltaTime);
+	}
+
+	public Vector3 GetNextPosition()
+	{
+		Vector3 target = Path[CurrentPathIndex] + m_PositionOffset;
+		if (Vector3.Equals(transform.position, target))
+		{
+			if (CurrentPathIndex == Path.Count - 1)
+			{
+				m_ReachedPlayerBase = true;
+				return Path[CurrentPathIndex];
+			}
+			CurrentPathIndex++;
+			target = Path[CurrentPathIndex] + m_PositionOffset;
+
+			// Ugly to set rotation in get next path point. Question to Ederic, what is a good way to do it without breaking single responsibility
+			transform.rotation = Quaternion.LookRotation(target - transform.position);
+
+			return target;
+		}
+		return target;
+	}
+
+	private IEnumerator Die()
+	{
+		m_Collider.enabled = false;
+		yield return new WaitForSeconds(m_DeathTimer);
+		gameObject.SetActive(false);
+	}
+
+	
+	public void StartEffect(IStatusEffect effect)
+	{
+		if (effect.ShouldStack == false)
+		{
+			for (int i = ActiveStatusEffects.Count - 1; i >= 0; i--)
+			{
+				if (ActiveStatusEffects[i].Type == effect.Type)
+				{
+					StopCoroutine(ActiveStatusEffects[i].Routine);
+					ActiveStatusEffects[i].Disable(gameObject);
+					ActiveStatusEffects.RemoveAt(i);
+				}
+			}
+		}
+
+		effect.Routine = StartCoroutine(ApplyEffect(effect));
+		ActiveStatusEffects.Add(effect);
+	}
+
+	public IEnumerator ApplyEffect(IStatusEffect effect)
+	{
+		effect.Enable(gameObject);
+
+		yield return new WaitForSeconds(effect.Duration);
+
+		effect.Disable(gameObject);
+		ActiveStatusEffects.Remove(effect);
+	}
 }

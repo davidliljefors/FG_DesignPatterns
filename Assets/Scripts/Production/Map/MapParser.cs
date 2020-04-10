@@ -56,7 +56,6 @@ namespace MapTools
 					int typeID = 0;
 					foreach (string unitCount in unitCounts)
 					{
-
 						if (int.TryParse(unitCount, out int result))
 						{
 							wave.Units.Add(UnitMethods.TypeById[typeID], int.Parse(unitCount));

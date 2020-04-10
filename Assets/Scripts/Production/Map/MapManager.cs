@@ -6,9 +6,9 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
 	public MapConfig mapObject;
-
 	public MapInfo MapInfo { get; private set; }
 	public IEnumerable<Vector2Int> Path { get; private set; }
+
 	private IPathFinder pathFinder;
 	private IList<Vector3> m_WorldPath = null;
 
@@ -38,7 +38,4 @@ public class MapManager : MonoBehaviour
 		pathFinder = new Dijkstra(MapInfo.GetWalkable());
 		Path = pathFinder.FindPath(MapInfo.Start.Value, MapInfo.End.Value);
 	}
-
-
-
 }

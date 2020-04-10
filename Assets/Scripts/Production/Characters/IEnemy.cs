@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 public interface IEnemy : ICharacter
 {
-	IList<Vector3> Path { get; set; }
+	bool Killed { get; set; }
 }
 		
