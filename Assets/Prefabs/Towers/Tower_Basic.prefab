@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6920350357422403657}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 5536852322259098900}
   - component: {fileID: 4712883144571185557}
   - component: {fileID: 6747784061241277602}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Tower_Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8147184712414759068}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Bullet_Spawn_Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: -9105232742491929182}
   - component: {fileID: -7786919706660471096}
   - component: {fileID: 8055664444285690423}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Tower_Basic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 4509796138376371702}
   - component: {fileID: 233341260249848239}
   - component: {fileID: 7657464404072120783}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Tile_Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,7 +327,7 @@ GameObject:
   - component: {fileID: 87874853061784506}
   - component: {fileID: 4077201292069112594}
   - component: {fileID: 4661140173080966243}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Tower_Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -407,7 +407,7 @@ GameObject:
   - component: {fileID: 4668011665009641896}
   - component: {fileID: 7289099760144782774}
   - component: {fileID: 7788423228428159215}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Tower_base
   m_TagString: Untagged
   m_Icon: {fileID: 0}

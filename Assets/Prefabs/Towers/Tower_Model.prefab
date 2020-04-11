@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3640341597556054263}
   - component: {fileID: 1685781230768817385}
   - component: {fileID: 2187347733138053552}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tower_base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,6 +54,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -65,6 +66,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -88,7 +90,7 @@ GameObject:
   - component: {fileID: 8319623177269437157}
   - component: {fileID: 5393109468766837325}
   - component: {fileID: 3666702844576441660}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tower_Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,6 +134,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -143,6 +146,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -167,7 +171,7 @@ GameObject:
   - component: {fileID: 5538036884648070313}
   - component: {fileID: 8174581044139116784}
   - component: {fileID: 1732139592624459920}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tile_Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,6 +214,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -221,6 +226,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -255,7 +261,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1430611518195826670}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tower_Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -289,7 +295,7 @@ GameObject:
   - component: {fileID: 4511434059114826827}
   - component: {fileID: 3686911827145980106}
   - component: {fileID: 3452569178055880189}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tower_Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -333,6 +339,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -344,6 +351,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -365,7 +373,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 242510282953726403}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bullet_Spawn_Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -395,7 +403,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1317031834752082198}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
