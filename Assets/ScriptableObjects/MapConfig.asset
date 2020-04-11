@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef9c2ecdd9edf724696fef286e120c0c, type: 3}
   m_Name: MapConfig
   m_EditorClassIdentifier: 
-  textFile: {fileID: 4900000, guid: 4dcab1bd1b06fbe459b5e52ee96db9b1, type: 3}
+  textFile: {fileID: 4900000, guid: 2f8246b41c2107b40b372057cb22be65, type: 3}
   m_TileSize: {x: 2, y: 2}
   m_SpawnOffset: {x: 0, y: 0}
   m_TileToPrefab:

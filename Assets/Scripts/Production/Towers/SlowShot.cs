@@ -2,11 +2,9 @@
 
 public class SlowShot : ProjectileBase
 {
-	private IStatusEffect m_SlowEffect;
-
 	private void Awake()
 	{
-		m_SlowEffect = new SlowEffect(StatusEffectType.Slow, 3f, 0.3f);
+		
 	}
 
 	public override void Impact(GameObject other)
@@ -20,7 +18,8 @@ public class SlowShot : ProjectileBase
 		IStatusAffectable affectable = other.GetComponentInParent<IStatusAffectable>();
 		if (affectable != null)
 		{
-			affectable.StartEffect(m_SlowEffect);
+			IStatusEffect SlowEffect = new SlowEffect(StatusEffectType.Slow, 0.5f, 0.3f);
+			affectable.StartEffect(SlowEffect);
 		}
 	}
 }

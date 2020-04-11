@@ -619,8 +619,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MoveSpeed: 10
-  m_MaxHealth: 10
-  m_DeathTimer: 2
+  m_MaxHealth: 20
+  m_DeathTimer: 1
 --- !u!1 &5986334292449699506
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,6 +21,9 @@ public interface IStatusEffect
 	// Example burning effect
 	// void Tick(float ElapsedTime)
 
+	/// <summary>
+	/// Disable should allow calling twice or more without side effects
+	/// </summary>
 	void Disable(GameObject affected);
 	
 }

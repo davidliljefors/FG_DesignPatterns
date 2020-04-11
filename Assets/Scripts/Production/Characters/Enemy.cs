@@ -16,6 +16,14 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 	private Animator m_Anim;
 	private BoxCollider m_Collider;
 
+	// Animation hash values
+	int m_KilledHash = Animator.StringToHash("Killed");
+	int m_DamagedHash = Animator.StringToHash("Damaged");
+	int m_WalkingHash = Animator.StringToHash("isWalking");
+	int m_WalkStateHash = Animator.StringToHash("Walk");
+
+	const string m_PlayerTag = "Player";
+
 	public List<IStatusEffect> ActiveStatusEffects { get; private set; }
 
 	public bool Killed { get; set; } = false;
@@ -41,20 +49,28 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 		ActiveStatusEffects = new List<IStatusEffect>();
 	}
 
-	private void OnEnable()
+	public void Init()
 	{
+		OnHealthChanged += DeathCheck;
+		OnHealthChanged += TakeDamageAnim;
 		CurrentPathIndex = 0;
 		m_Health = m_MaxHealth;
 		m_ReachedPlayerBase = false;
 		Killed = false;
-		OnHealthChanged += DeathCheck;
-		OnHealthChanged += TakeDamageAnim;
-
 		m_Collider = GetComponentInChildren<BoxCollider>();
 		m_Collider.enabled = true;
+
 		m_Anim = GetComponent<Animator>();
+		m_Anim.ResetTrigger(m_KilledHash);
+		// Todo: fix resetting animation 
+		m_Anim.Play(m_WalkStateHash, -1, UnityEngine.Random.value);
+
 		m_PositionOffset = new Vector3(0, m_Collider.size.y / 2f, 0);
 		transform.position += m_PositionOffset;
+	}
+	public void OnEnable()
+	{
+		Init();
 	}
 
 	private void OnDisable()
@@ -67,9 +83,7 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 	{
 		if (newHealth <= 0 && !Killed)
 		{
-			// Todo: Fix! Only using string to set for testing purposes
-			const string Name = "Killed";
-			m_Anim.SetTrigger(Name);
+			m_Anim.SetTrigger(m_KilledHash);
 			Killed = true;
 			StartCoroutine(Die());
 		}
@@ -79,9 +93,7 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 	{
 		if (!Killed)
 		{
-			// Todo: Fix! Only using string to set for testing purposes
-			const string Name = "Damaged";
-			m_Anim.SetTrigger(Name);
+			m_Anim.SetTrigger(m_DamagedHash);
 		}
 	}
 
@@ -90,10 +102,8 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 		if (!Killed)
 		{
 			if (m_ReachedPlayerBase)
-			{
-				// Todo: fix string 
-				const string Tag = "Player";
-				GameObject.FindGameObjectWithTag(Tag).GetComponent<Player>().Health -= 1;
+			{		
+				GameObject.FindGameObjectWithTag(m_PlayerTag).GetComponent<ICharacter>().Health -= 1;
 				gameObject.SetActive(false);
 				// Todo Attack player
 				return;
@@ -104,9 +114,7 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 
 	public void Move(Vector3 nextPosition)
 	{
-		// Todo: Fix! Only using string to set for testing purposes
-		const string Name = "isWalking";
-		m_Anim.SetBool(Name, true);
+		m_Anim.SetBool(m_WalkingHash, true);
 		transform.position = Vector3.MoveTowards(transform.position, nextPosition, MoveSpeed * Time.deltaTime);
 	}
 
@@ -143,27 +151,26 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 	{
 		if (effect.ShouldStack == false)
 		{
-			for (int i = ActiveStatusEffects.Count - 1; i >= 0; i--)
+			for (int i = 0; i < ActiveStatusEffects.Count; ++i)
 			{
 				if (ActiveStatusEffects[i].Type == effect.Type)
 				{
 					StopCoroutine(ActiveStatusEffects[i].Routine);
 					ActiveStatusEffects[i].Disable(gameObject);
 					ActiveStatusEffects.RemoveAt(i);
+					break;
 				}
 			}
 		}
 
 		effect.Routine = StartCoroutine(ApplyEffect(effect));
-		ActiveStatusEffects.Add(effect);
 	}
 
 	public IEnumerator ApplyEffect(IStatusEffect effect)
 	{
+		ActiveStatusEffects.Add(effect);
 		effect.Enable(gameObject);
-
 		yield return new WaitForSeconds(effect.Duration);
-
 		effect.Disable(gameObject);
 		ActiveStatusEffects.Remove(effect);
 	}

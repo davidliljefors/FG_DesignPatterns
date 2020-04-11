@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameOverUI : MonoBehaviour, IDisposable
 {
-	[SerializeField] GameObject m_GameOverPanel;
+	[SerializeField] GameObject m_GameOverPanel = default;
 	private ICharacter m_Player;
 
 	void Start()

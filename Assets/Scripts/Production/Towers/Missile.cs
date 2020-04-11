@@ -4,7 +4,7 @@ public class Missile : ProjectileBase
 {
 	[SerializeField] private uint m_HitBufferSize = 8;
 	[SerializeField] private float m_ExplosionRadius = 0.5f;
-	[SerializeField] private LayerMask m_CollisionLayer;
+	[SerializeField] private LayerMask m_CollisionLayer = default;
 
 	private Collider[] m_HitBuffer;
 
@@ -27,10 +27,5 @@ public class Missile : ProjectileBase
 			}
 		}
 		gameObject.SetActive(false);
-	}
-
-	private void OnDrawGizmos()
-	{
-		Gizmos.DrawWireSphere(transform.position, m_ExplosionRadius);
 	}
 }

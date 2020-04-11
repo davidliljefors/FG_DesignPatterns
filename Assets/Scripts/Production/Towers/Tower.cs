@@ -9,6 +9,7 @@ public class Tower : MonoBehaviour, ITower
 	[SerializeField] private float m_AttackDelay = 1f;
 	[SerializeField] private GameObject m_Projectile = default;
 	[SerializeField] private GameObjectPool m_ProjectilePool;
+	[SerializeField] private int m_Damage = 1;
 
 	private const string k_EnemyTag = "Enemy";
 
@@ -17,7 +18,7 @@ public class Tower : MonoBehaviour, ITower
 	public float Range { get => m_Range; set => m_Range = value; }
 	public float AttackDelay { get => m_AttackDelay; set => m_AttackDelay = value; }
 	public GameObject Projectile { get => m_Projectile; set => m_Projectile = value; }
-
+	
 	private void Start()
 	{
 		SphereCollider sphere = GetComponent<SphereCollider>();
@@ -40,6 +41,7 @@ public class Tower : MonoBehaviour, ITower
 		var proj = go.GetComponent<IProjectile>();
 		go.transform.position = transform.position;
 		proj.Target = target;
+		proj.Damage = m_Damage;
 
 		go.SetActive(true);
 	}

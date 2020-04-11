@@ -300,9 +300,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Range: 3
-  m_AttackDelay: 0.3
+  m_AttackDelay: 0.1
   m_Projectile: {fileID: 3607914761030221542, guid: 5f807085decf56049bf0dd6a2c8113cd,
     type: 3}
+  m_Damage: 3
 --- !u!135 &7491491700684687824
 SphereCollider:
   m_ObjectHideFlags: 0

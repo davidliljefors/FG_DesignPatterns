@@ -62,6 +62,7 @@ namespace MapTools
 			Assert.IsTrue(Start.HasValue, "No Start found in map!");
 			Assert.IsTrue(End.HasValue, "No Start found in map!");
 		}
+
 		public IEnumerable<Vector2Int> GetWalkable()
 		{
 			if (calculatedWalkable)

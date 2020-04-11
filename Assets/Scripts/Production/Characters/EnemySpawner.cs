@@ -19,13 +19,11 @@ public class EnemySpawner : MonoBehaviour
 	[SerializeField] private MapManager m_MapManager = default;
 	[SerializeField] private uint m_InitialPoolSize = 25;
 	[SerializeField] private float m_SpawnSpeed = 1f;
-	[SerializeField] private UnitTypeToPrefab[] m_UnitTypeToPrefab;
+	[SerializeField] private UnitTypeToPrefab[] m_UnitTypeToPrefab = default;
 
 	private Queue<UnitWave> m_SpawnWaves;
 	private IDictionary<UnitType, GameObjectPool> m_EnemyPools;
-	private Coroutine m_SpawnRoutine;
 
-	// Start is called before the first frame update
 	void Start()
 	{
 		m_EnemyPools = new Dictionary<UnitType, GameObjectPool>();
@@ -40,7 +38,6 @@ public class EnemySpawner : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Space))
 		{
-			Debug.Log("Spawning");
 			StartCoroutine(SpawnWave());
 		}
 	}
