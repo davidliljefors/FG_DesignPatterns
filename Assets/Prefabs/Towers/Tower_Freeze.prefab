@@ -299,8 +299,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616e9e8fe29de56449c9f8d85b0b3e71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Range: 3
-  m_AttackDelay: 0.1
+  m_Range: 5
+  m_AttackDelay: 1
   m_Projectile: {fileID: 3607914761030221542, guid: 5f807085decf56049bf0dd6a2c8113cd,
     type: 3}
   m_Damage: 3

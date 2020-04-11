@@ -222,7 +222,7 @@ MonoBehaviour:
   m_AttackDelay: 0.5
   m_Projectile: {fileID: 225077031991834588, guid: e2865f010891d4cda90f443c0fe28d13,
     type: 3}
-  m_Damage: 25
+  m_Damage: 10
 --- !u!1 &5631700032539338828
 GameObject:
   m_ObjectHideFlags: 0
