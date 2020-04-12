@@ -336,6 +336,7 @@ MonoBehaviour:
   m_MoveSpeed: 7
   m_MaxHealth: 50
   m_DeathTimer: 1
+  m_Damage: 3
 --- !u!1 &2566203156488710717
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 	[SerializeField] private float m_MoveSpeed = 1f;
 	[SerializeField] private int m_MaxHealth = 10;
 	[SerializeField] private float m_DeathTimer = 1f;
-	[SerializeField] private float m_Damage = 1f;
+	[SerializeField] private int m_Damage = 1;
 	private int m_Health = 10;
 	private Vector3 m_PositionOffset;
 	private bool m_ReachedPlayerBase = false;
