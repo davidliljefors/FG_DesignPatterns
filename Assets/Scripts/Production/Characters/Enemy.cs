@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 	[SerializeField] private float m_MoveSpeed = 1f;
 	[SerializeField] private int m_MaxHealth = 10;
 	[SerializeField] private float m_DeathTimer = 1f;
+	[SerializeField] private float m_Damage = 1f;
 	private int m_Health = 10;
 	private Vector3 m_PositionOffset;
 	private bool m_ReachedPlayerBase = false;
@@ -103,7 +104,7 @@ public class Enemy : MonoBehaviour, IEnemy, IPathAgent, IStatusAffectable
 		{
 			if (m_ReachedPlayerBase)
 			{		
-				GameObject.FindGameObjectWithTag(m_PlayerTag).GetComponent<ICharacter>().Health -= 1;
+				GameObject.FindGameObjectWithTag(m_PlayerTag).GetComponent<ICharacter>().Health -= m_Damage;
 				gameObject.SetActive(false);
 				// Todo Attack player
 				return;
